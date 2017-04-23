@@ -18,6 +18,7 @@ import (
 	"context"
 	"flag"
 
+	"github.com/qqiao/app-tools/appengine"
 	"github.com/qqiao/app-tools/buildinfo"
 	"github.com/qqiao/cli"
 )
@@ -25,6 +26,7 @@ import (
 var component = cli.Component{
 	UsageLine: "app-toos command",
 	Components: []*cli.Component{
+		appengine.NewComponent(),
 		buildinfo.NewComponent(),
 	},
 	Run: func(context.Context, *cli.Component, []string) {},
