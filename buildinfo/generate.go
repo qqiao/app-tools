@@ -17,6 +17,7 @@ package buildinfo
 import (
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -96,7 +97,9 @@ func newGenerateComponent() *cli.Component {
 		UsageLine: "generate [-f file_name]",
 		Short:     "generates a new build information file",
 		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			comp.Flag.Parse(args)
+			if flag.ErrHelp == comp.Flag.Parse(args) {
+				return
+			}
 
 			outputFile := fileFlag
 			if !filepath.IsAbs(outputFile) {

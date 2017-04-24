@@ -16,8 +16,14 @@ package yaml
 
 import (
 	"context"
+	"flag"
 
 	"github.com/qqiao/cli"
+)
+
+var (
+	tmplFlag   string
+	outputFlag string
 )
 
 // NewComponent returns the cli component for all yaml related commands.
@@ -31,7 +37,9 @@ func NewComponent() *cli.Component {
 		},
 
 		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			comp.Flag.Parse(args)
+			if flag.ErrHelp == comp.Flag.Parse(args) {
+				return
+			}
 
 			if comp.Flag.NArg() < 1 {
 				comp.Flag.Usage()

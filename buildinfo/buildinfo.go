@@ -16,6 +16,7 @@ package buildinfo
 
 import (
 	"context"
+	"flag"
 
 	"github.com/qqiao/cli"
 )
@@ -29,7 +30,9 @@ func NewComponent() *cli.Component {
 		UsageLine: "buildinfo command",
 		Short:     "tools for manipulating the build information",
 		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			comp.Flag.Parse(args)
+			if flag.ErrHelp == comp.Flag.Parse(args) {
+				return
+			}
 
 			if comp.Flag.NArg() < 1 {
 				comp.Flag.Usage()
