@@ -18,12 +18,8 @@ import (
 	"context"
 	"flag"
 
+	"github.com/qqiao/app-tools/appengine/yaml/generate"
 	"github.com/qqiao/cli"
-)
-
-var (
-	tmplFlag   string
-	outputFlag string
 )
 
 // NewComponent returns the cli component for all yaml related commands.
@@ -33,7 +29,7 @@ func NewComponent() *cli.Component {
 		Short:     "tools for generating Google App Engine .yaml files",
 
 		Components: []*cli.Component{
-			newGenerateComponent(),
+			generate.NewComponent(),
 		},
 
 		Run: func(ctx context.Context, comp *cli.Component, args []string) {

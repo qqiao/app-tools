@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package yaml
+package generate
 
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -27,7 +28,14 @@ import (
 	"github.com/qqiao/cli"
 )
 
-func newGenerateComponent() *cli.Component {
+var (
+	outputFlag string
+	tmplFlag   string
+	dataFlag   string
+)
+
+// NewComponent returns the new component for cli.
+func NewComponent() *cli.Component {
 	comp := &cli.Component{
 		UsageLine: "generate",
 
@@ -41,8 +49,14 @@ func newGenerateComponent() *cli.Component {
 			outputFlag = sanitizePath(outputFlag,
 				fmt.Sprintln("Please specify output file..."), comp)
 
-			// TODO sort out the data part
-			ch := Generate(tmplFlag, outputFlag, nil)
+			var data map[string]interface{}
+			if err := json.Unmarshal([]byte(dataFlag), &data); nil != err {
+				fmt.Fprintf(os.Stderr, "Unable to parse data. Error: %s",
+					err.Error())
+				os.Exit(1)
+			}
+
+			ch := Generate(tmplFlag, outputFlag, data)
 			if !<-ch {
 				os.Exit(1)
 			}
@@ -53,6 +67,7 @@ func newGenerateComponent() *cli.Component {
 		"path of the template for the .yaml file to generate")
 	comp.Flag.StringVar(&outputFlag, "o", "",
 		"path of the .yaml file to create")
+	comp.Flag.StringVar(&dataFlag, "data", "", "data for the template")
 
 	return comp
 }
