@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// App tools is a set of convenient tools that can be used to generate web
+// application files.
 package main
 
 import (
@@ -42,13 +44,6 @@ func main() {
 		flag.Usage()
 		return
 	}
-
-	// workingDir, err := os.Getwd()
-	// if nil != err {
-	// 	fmt.Fprintf(os.Stderr, "Unable to determine working dir. Error: %s\n", err)
-	// 	os.Exit(1)
-	// }
-	// fmt.Fprintf(os.Stdout, "Working Directory: %s.\n", workingDir)
 
 	name := flag.Arg(0)
 	for _, comp := range component.Components {

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package buildinfo provides tool for generating and managing web application
+// build information
 package buildinfo
 
 import (
