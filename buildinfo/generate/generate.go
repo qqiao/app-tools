@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package buildinfo
+package generate
 
 import (
 	"context"
@@ -29,6 +29,8 @@ import (
 	"github.com/qqiao/buildinfo"
 	"github.com/qqiao/cli"
 )
+
+var fileFlag string
 
 // Generate generates build information.
 func Generate(path string) <-chan bool {
@@ -90,9 +92,9 @@ func gitRevision() <-chan string {
 	return out
 }
 
-// newGenerateComponent returns a cli component that is for generating a new
+// NewComponent returns a cli component that is for generating a new
 // build info.
-func newGenerateComponent() *cli.Component {
+func NewComponent() *cli.Component {
 	comp := &cli.Component{
 		UsageLine: "generate [-f file_name]",
 		Short:     "generates a new build information file",

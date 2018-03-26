@@ -1,4 +1,4 @@
-// Copyright 2017 Qian Qiao
+// Copyright 2018 Qian Qiao
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package generate
+package execute
 
 import (
 	"bytes"
@@ -20,10 +20,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"text/template"
 
 	"github.com/qqiao/cli"
 )
@@ -34,11 +34,10 @@ var (
 	dataFlag   string
 )
 
-// NewComponent returns the new component for cli.
+// NewComponent creates a new CLI component for executing a template
 func NewComponent() *cli.Component {
 	comp := &cli.Component{
-		UsageLine: "generate",
-
+		UsageLine: "execute",
 		Run: func(ctx context.Context, comp *cli.Component, args []string) {
 			if flag.ErrHelp == comp.Flag.Parse(args) {
 				return
@@ -56,25 +55,26 @@ func NewComponent() *cli.Component {
 				os.Exit(1)
 			}
 
-			ch := Generate(tmplFlag, outputFlag, data)
+			ch := Execute(tmplFlag, outputFlag, data)
 			if !<-ch {
 				os.Exit(1)
 			}
 		},
 	}
 
-	comp.Flag.StringVar(&tmplFlag, "tmpl", "",
-		"path of the template for the .yaml file to generate")
+	comp.Flag.StringVar(&tmplFlag, "t", "",
+		"path to the template file")
 	comp.Flag.StringVar(&outputFlag, "o", "",
-		"path of the .yaml file to create")
-	comp.Flag.StringVar(&dataFlag, "data", "", "data for the template")
+		"path to the output file")
+	comp.Flag.StringVar(&dataFlag, "data", "",
+		"data for the template in JSON format")
 
 	return comp
 }
 
-// Generate generates the .yaml file based on the template and the data.
+// Execute runs template based on the data.
 // writes generate file to the specified output file
-func Generate(tmplPath, outputPath string, data interface{}) <-chan bool {
+func Execute(tmplPath, outputPath string, data interface{}) <-chan bool {
 	done := make(chan bool, 1)
 
 	go func() {

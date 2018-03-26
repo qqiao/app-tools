@@ -1,4 +1,4 @@
-// Copyright 2017 Qian Qiao
+// Copyright 2018 Qian Qiao
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,26 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package yaml
+package template
 
 import (
 	"context"
 	"flag"
 
-	"github.com/qqiao/app-tools/appengine/yaml/generate"
+	"github.com/qqiao/app-tools/template/execute"
 	"github.com/qqiao/cli"
 )
 
-// NewComponent returns the cli component for all yaml related commands.
+// NewComponent returns a new CLI component for the files related commands.
 func NewComponent() *cli.Component {
 	return &cli.Component{
-		UsageLine: "yaml command",
-		Short:     "tools for generating Google App Engine .yaml files",
-
-		Components: []*cli.Component{
-			generate.NewComponent(),
-		},
-
+		UsageLine: "template command",
+		Short:     "tools for generate static files from templates",
 		Run: func(ctx context.Context, comp *cli.Component, args []string) {
 			if flag.ErrHelp == comp.Flag.Parse(args) {
 				return
@@ -53,6 +48,9 @@ func NewComponent() *cli.Component {
 				}
 			}
 			comp.Flag.Usage()
+		},
+		Components: []*cli.Component{
+			execute.NewComponent(),
 		},
 	}
 }

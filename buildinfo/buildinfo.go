@@ -21,9 +21,9 @@ import (
 	"flag"
 
 	"github.com/qqiao/cli"
-)
 
-var fileFlag string
+	"github.com/qqiao/app-tools/buildinfo/generate"
+)
 
 // NewComponent returns command line component that can be used to form
 // complex commandline application
@@ -54,7 +54,7 @@ func NewComponent() *cli.Component {
 			comp.Flag.Usage()
 		},
 		Components: []*cli.Component{
-			newGenerateComponent(),
+			generate.NewComponent(),
 		},
 	}
 }

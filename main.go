@@ -20,16 +20,17 @@ import (
 	"context"
 	"flag"
 
-	"github.com/qqiao/app-tools/appengine"
 	"github.com/qqiao/app-tools/buildinfo"
+	"github.com/qqiao/app-tools/template"
+
 	"github.com/qqiao/cli"
 )
 
 var component = cli.Component{
 	UsageLine: "app-toos command",
 	Components: []*cli.Component{
-		appengine.NewComponent(),
 		buildinfo.NewComponent(),
+		template.NewComponent(),
 	},
 	Run: func(context.Context, *cli.Component, []string) {},
 }
