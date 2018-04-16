@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/qqiao/app-tools.svg?branch=master)](https://travis-ci.org/qqiao/app-tools)
+[![Build Status](https://circleci.com/gh/qqiao/app-tools.svg?style=svg)](https://circleci.com/gh/qqiao/app-tools)
 
 # app-tools
 
