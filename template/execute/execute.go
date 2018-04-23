@@ -39,7 +39,7 @@ func NewComponent() *cli.Component {
 	comp := &cli.Component{
 		UsageLine: "execute",
 		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			if flag.ErrHelp == comp.Flag.Parse(args) {
+			if flag.ErrHelp == comp.FlagSet().Parse(args) {
 				return
 			}
 
@@ -62,11 +62,11 @@ func NewComponent() *cli.Component {
 		},
 	}
 
-	comp.Flag.StringVar(&tmplFlag, "t", "",
+	comp.FlagSet().StringVar(&tmplFlag, "t", "",
 		"path to the template file")
-	comp.Flag.StringVar(&outputFlag, "o", "",
+	comp.FlagSet().StringVar(&outputFlag, "o", "",
 		"path to the output file")
-	comp.Flag.StringVar(&dataFlag, "data", "",
+	comp.FlagSet().StringVar(&dataFlag, "data", "",
 		"data for the template in JSON format")
 
 	return comp

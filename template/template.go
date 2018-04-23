@@ -15,9 +15,6 @@
 package template
 
 import (
-	"context"
-	"flag"
-
 	"github.com/qqiao/app-tools/template/execute"
 	"github.com/qqiao/cli"
 )
@@ -27,28 +24,7 @@ func NewComponent() *cli.Component {
 	return &cli.Component{
 		UsageLine: "template command",
 		Short:     "tools for generate static files from templates",
-		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			if flag.ErrHelp == comp.Flag.Parse(args) {
-				return
-			}
-
-			if comp.Flag.NArg() < 1 {
-				comp.Flag.Usage()
-				return
-			}
-
-			a := comp.Flag.Args()
-			for _, c := range comp.Components {
-				if a[0] == c.Name() {
-					if c.Runnable() {
-						c.Flag.Usage = c.Usage
-						c.Run(ctx, c, a[1:])
-						return
-					}
-				}
-			}
-			comp.Flag.Usage()
-		},
+		Run:       cli.Passthrough,
 		Components: []*cli.Component{
 			execute.NewComponent(),
 		},

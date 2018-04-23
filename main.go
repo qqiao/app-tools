@@ -18,7 +18,7 @@ package main
 
 import (
 	"context"
-	"flag"
+	"os"
 
 	"github.com/qqiao/app-tools/buildinfo"
 	"github.com/qqiao/app-tools/template"
@@ -26,37 +26,15 @@ import (
 	"github.com/qqiao/cli"
 )
 
-var component = cli.Component{
+var component = &cli.Component{
 	UsageLine: "app-toos command",
 	Components: []*cli.Component{
 		buildinfo.NewComponent(),
 		template.NewComponent(),
 	},
-	Run: func(context.Context, *cli.Component, []string) {},
-}
-
-func init() {
-	flag.Usage = component.Usage
+	Run: cli.Passthrough,
 }
 
 func main() {
-	flag.Parse()
-	if flag.NArg() < 1 {
-		flag.Usage()
-		return
-	}
-
-	name := flag.Arg(0)
-	for _, comp := range component.Components {
-		if name == comp.Name() {
-			if comp.Runnable() {
-				args := flag.Args()[1:]
-				ctx := context.Background()
-				comp.Flag.Usage = comp.Usage
-				comp.Run(ctx, comp, args)
-				return
-			}
-		}
-	}
-	flag.Usage()
+	component.Run(context.Background(), component, os.Args[1:])
 }

@@ -99,7 +99,7 @@ func NewComponent() *cli.Component {
 		UsageLine: "generate [-f file_name]",
 		Short:     "generates a new build information file",
 		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			if flag.ErrHelp == comp.Flag.Parse(args) {
+			if flag.ErrHelp == comp.FlagSet().Parse(args) {
 				return
 			}
 
@@ -121,7 +121,7 @@ func NewComponent() *cli.Component {
 		},
 	}
 
-	comp.Flag.StringVar(&fileFlag, "f", "build_info.json", "file to write to")
+	comp.FlagSet().StringVar(&fileFlag, "f", "build_info.json", "file to write to")
 
 	return comp
 }

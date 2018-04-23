@@ -17,9 +17,6 @@
 package buildinfo
 
 import (
-	"context"
-	"flag"
-
 	"github.com/qqiao/cli"
 
 	"github.com/qqiao/app-tools/buildinfo/generate"
@@ -31,28 +28,7 @@ func NewComponent() *cli.Component {
 	return &cli.Component{
 		UsageLine: "buildinfo command",
 		Short:     "tools for manipulating the build information",
-		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			if flag.ErrHelp == comp.Flag.Parse(args) {
-				return
-			}
-
-			if comp.Flag.NArg() < 1 {
-				comp.Flag.Usage()
-				return
-			}
-
-			a := comp.Flag.Args()
-			for _, c := range comp.Components {
-				if a[0] == c.Name() {
-					if c.Runnable() {
-						c.Flag.Usage = c.Usage
-						c.Run(ctx, c, a[1:])
-						return
-					}
-				}
-			}
-			comp.Flag.Usage()
-		},
+		Run:       cli.Passthrough,
 		Components: []*cli.Component{
 			generate.NewComponent(),
 		},
