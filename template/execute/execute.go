@@ -38,35 +38,38 @@ var (
 func NewComponent() *cli.Component {
 	comp := &cli.Component{
 		UsageLine: "execute",
-		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			if flag.ErrHelp == comp.FlagSet().Parse(args) {
-				return
-			}
-
-			tmplFlag = sanitizePath(tmplFlag,
-				fmt.Sprintln("Please specify template file..."), comp)
-			outputFlag = sanitizePath(outputFlag,
-				fmt.Sprintln("Please specify output file..."), comp)
-
-			var data map[string]interface{}
-			if err := json.Unmarshal([]byte(dataFlag), &data); nil != err {
-				fmt.Fprintf(os.Stderr, "Unable to parse data. Error: %s",
-					err.Error())
-				os.Exit(1)
-			}
-
-			ch := Execute(tmplFlag, outputFlag, data)
-			if !<-ch {
-				os.Exit(1)
-			}
-		},
 	}
 
-	comp.FlagSet().StringVar(&tmplFlag, "t", "",
+	flagSet := comp.FlagSet()
+
+	comp.Run = func(ctx context.Context, comp *cli.Component, args []string) {
+		if flag.ErrHelp == flagSet.Parse(args) {
+			return
+		}
+
+		tmplFlag = sanitizePath(tmplFlag,
+			fmt.Sprintln("Please specify template file..."), comp)
+		outputFlag = sanitizePath(outputFlag,
+			fmt.Sprintln("Please specify output file..."), comp)
+
+		var data map[string]interface{}
+		if err := json.Unmarshal([]byte(dataFlag), &data); nil != err {
+			fmt.Fprintf(os.Stderr, "Unable to parse data. Error: %s",
+				err.Error())
+			os.Exit(1)
+		}
+
+		ch := Execute(tmplFlag, outputFlag, data)
+		if !<-ch {
+			os.Exit(1)
+		}
+	}
+
+	flagSet.StringVar(&tmplFlag, "t", "",
 		"path to the template file")
-	comp.FlagSet().StringVar(&outputFlag, "o", "",
+	flagSet.StringVar(&outputFlag, "o", "",
 		"path to the output file")
-	comp.FlagSet().StringVar(&dataFlag, "data", "",
+	flagSet.StringVar(&dataFlag, "data", "",
 		"data for the template in JSON format")
 
 	return comp

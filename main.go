@@ -28,6 +28,9 @@ import (
 
 var component = &cli.Component{
 	UsageLine: "app-toos command",
+	Long: `
+App Tools is a set of tools designed to make the development of web
+applications easier.`,
 	Components: []*cli.Component{
 		buildinfo.NewComponent(),
 		template.NewComponent(),

@@ -98,30 +98,33 @@ func NewComponent() *cli.Component {
 	comp := &cli.Component{
 		UsageLine: "generate [-f file_name]",
 		Short:     "generates a new build information file",
-		Run: func(ctx context.Context, comp *cli.Component, args []string) {
-			if flag.ErrHelp == comp.FlagSet().Parse(args) {
-				return
-			}
-
-			outputFile := fileFlag
-			if !filepath.IsAbs(outputFile) {
-				cwd, err := os.Getwd()
-				if nil != err {
-					fmt.Fprintf(os.Stderr,
-						"Unable to determine current working directory. Error: %s\n",
-						err.Error())
-					return
-				}
-				outputFile = filepath.Clean(filepath.Join(cwd, outputFile))
-			}
-
-			if !<-Generate(outputFile) {
-				os.Exit(1)
-			}
-		},
 	}
 
-	comp.FlagSet().StringVar(&fileFlag, "f", "build_info.json", "file to write to")
+	flagSet := comp.FlagSet()
+
+	comp.Run = func(ctx context.Context, comp *cli.Component, args []string) {
+		if flag.ErrHelp == flagSet.Parse(args) {
+			return
+		}
+
+		outputFile := fileFlag
+		if !filepath.IsAbs(outputFile) {
+			cwd, err := os.Getwd()
+			if nil != err {
+				fmt.Fprintf(os.Stderr,
+					"Unable to determine current working directory. Error: %s\n",
+					err.Error())
+				return
+			}
+			outputFile = filepath.Clean(filepath.Join(cwd, outputFile))
+		}
+
+		if !<-Generate(outputFile) {
+			os.Exit(1)
+		}
+	}
+
+	flagSet.StringVar(&fileFlag, "f", "build_info.json", "file to write to")
 
 	return comp
 }
