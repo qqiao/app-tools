@@ -21,6 +21,7 @@ import (
 	"os"
 
 	"github.com/qqiao/app-tools/buildinfo"
+	"github.com/qqiao/app-tools/proxy"
 	"github.com/qqiao/app-tools/template"
 
 	"github.com/qqiao/cli"
@@ -33,6 +34,7 @@ App Tools is a set of tools designed to make the development of web
 applications easier.`,
 	Components: []*cli.Component{
 		buildinfo.NewComponent(),
+		proxy.NewComponent(),
 		template.NewComponent(),
 	},
 	Run: cli.Passthrough,
