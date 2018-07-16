@@ -20,8 +20,12 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -38,6 +42,7 @@ type Target struct {
 
 // Config encapsulates proxy configuration
 type Config struct {
+	Port    int      `json:"port"`
 	Targets []Target `json:"targets"`
 }
 
@@ -95,5 +100,16 @@ func proxy(ctx context.Context, comp *cli.Component, args []string) {
 		os.Exit(1)
 	}
 
-	log.Printf("%v", config)
+	for _, target := range config.Targets {
+		url, err := url.Parse(target.Target)
+
+		if nil != err {
+			log.Printf("Unable to parse URL '%s'. Error: %v", target.Target,
+				err)
+			os.Exit(1)
+		}
+		http.Handle(target.Path, httputil.NewSingleHostReverseProxy(url))
+	}
+
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.Port), nil))
 }
