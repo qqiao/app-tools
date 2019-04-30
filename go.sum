@@ -1,0 +1,4 @@
+github.com/qqiao/buildinfo v1.0.0 h1:Z7FlLFA4XBfwP0PKVojWaPnKyyFocdIlb4hTl01jvYE=
+github.com/qqiao/buildinfo v1.0.0/go.mod h1:t73wytAIYDgrnOXAqjrCYBEQXqWln9tSL5nmBH0Fs7s=
+github.com/qqiao/cli v1.0.0 h1:ZKGGxo/m5JtCDGa9W3NU2PhWkFgC0sydCE3/yHUE8kU=
+github.com/qqiao/cli v1.0.0/go.mod h1:VdSPjYUwBOg8ObyR4b4DGZg2JL69IlIpc7DLI/cqj5w=

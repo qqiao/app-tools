@@ -14,7 +14,7 @@
 
 // App tools is a set of convenient tools that can be used to generate web
 // application files.
-package main
+package main // import "github.com/qqiao/app-tools"
 
 import (
 	"context"
